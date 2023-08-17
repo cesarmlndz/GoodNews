@@ -28,7 +28,6 @@ export default function AddModal(props) {
                 console.log(res);
             }).catch((err) => {
                 console.log(err);
-                alert("Error adding new job.")
             });
 
             const newListing = {

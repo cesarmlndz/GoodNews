@@ -25,25 +25,24 @@ export default function EditModal(props) {
                 console.log(res);
             }).catch((err) => {
                 console.log(err);
-                alert("Error editing new job.")
             });
 
-            // props.setListings(props.listings.filter((listing) => listing.listing_id !== props.listingId));
+            const listingToEdit = props.listings.find((listing) => listing.listing_id === props.listingId);
 
-            // const listingToEdit = props.listings.find((listing) => listing.listing_id === props.listingId);
+            const editedListing = {
+                ...listingToEdit,
+                company_name: listingForm.companyName,
+                position_title: listingForm.positionTitle,
+                date_applied: listingForm.dateApplied,
+                job_status: listingForm.jobStatus,
+                job_link: listingForm.viewLink,
+            };
 
-            // const editedListing = {
-            //     ...listingToEdit,
-            //     company_name: listingForm.companyName,
-            //     position_title: listingForm.positionTitle,
-            //     date_applied: listingForm.dateApplied,
-            //     job_status: listingForm.jobStatus,
-            //     job_link: listingForm.viewLink,
-            // }
+            const listings = props.listings.filter((listing) => listing.listing_id !== props.listingId);
+            listings.push(editedListing);
+            console.log(listings);
 
-            // props.setListings([...props.listings, editedListing]);
-
-            window.location = '/';
+            props.setListings(listings);
             props.setTriggerEditModal(false);
         }
     }
@@ -53,8 +52,6 @@ export default function EditModal(props) {
             .then((res) => {
                 console.log(res);
             }).catch((err) => {
-                console.log(err);
-                alert("Error editing new job.")
             });
 
             props.setListings(props.listings.filter((listing) => listing.listing_id !== props.listingId));

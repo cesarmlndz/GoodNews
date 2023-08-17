@@ -12,7 +12,7 @@ export default function Chart(props) {
         numberOfPending: 0,
         numberOfHired: 0,
         numberOfRejected: 0
-    })
+    }); 
 
     useEffect(() => {
        axios.post("http://localhost:5001/getJobStatusNum", {
@@ -20,8 +20,24 @@ export default function Chart(props) {
        }).then((res) => {
             setJobStatusNums(res.data);
             props.setNumberOfPending(res.data.numberOfPending);
-       }).catch((err) => console.log(err))
-     }, [props.listings.length]);
+       }).catch((err) => console.log(err));
+
+       let jobStatusNumsVar = {
+            numberOfPending: 0,
+            numberOfHired: 0,
+            numberOfRejected: 0
+        };
+
+        for (let i = 0; i < props.listings.length; i++) {
+            if (props.listings[i].job_status === "Pending") jobStatusNumsVar = {...jobStatusNumsVar, numberOfPending: jobStatusNumsVar.numberOfPending += 1};
+            else if (props.listings[i].job_status === "Hired")  jobStatusNumsVar = {...jobStatusNumsVar, numberOfHired: jobStatusNumsVar.numberOfHired += 1};
+            else jobStatusNumsVar = {...jobStatusNumsVar, numberOfRejected: jobStatusNumsVar.numberOfRejected += 1};
+        }
+
+        setJobStatusNums(jobStatusNumsVar);
+        props.setNumberOfPending(jobStatusNumsVar.numberOfPending);
+
+     }, [props.listings]);
 
     return (
         <Doughnut

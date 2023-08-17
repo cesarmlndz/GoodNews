@@ -9,8 +9,23 @@ export default function Percentage(props) {
             listings: props.listings
        }).then((res) => {
             setPercentage(Math.trunc((res.data.numberOfPending / props.listings.length) * 100));
-       }).catch((err) => console.log(err))
-    }, [props.listings.length]);
+       }).catch((err) => console.log(err));
+
+       
+       let jobStatusNumsVar = {
+            numberOfPending: 0,
+            numberOfHired: 0,
+            numberOfRejected: 0
+        };
+
+        for (let i = 0; i < props.listings.length; i++) {
+            if (props.listings[i].job_status === "Pending") jobStatusNumsVar = {...jobStatusNumsVar, numberOfPending: jobStatusNumsVar.numberOfPending += 1};
+            else if (props.listings[i].job_status === "Hired")  jobStatusNumsVar = {...jobStatusNumsVar, numberOfHired: jobStatusNumsVar.numberOfHired += 1};
+            else jobStatusNumsVar = {...jobStatusNumsVar, numberOfRejected: jobStatusNumsVar.numberOfRejected += 1};
+        }
+
+        setPercentage(Math.trunc((jobStatusNumsVar.numberOfPending / props.listings.length) * 100));
+    }, [props.listings]);
 
     return (
         <div className='percentage-card-container'>
